@@ -1,76 +1,31 @@
 <template>
   <div class="container pt-1">
     <div class="card">
-      <h2>Actual news {{ now }}</h2>
-      <span
-        >Open: <strong>{{ openRate }}</strong> | Read: <strong>{{ readRate.size }}</strong></span
-      >
+      <h2>Slots</h2>
     </div>
 
-    <AppNews
-      v-for="item in news"
-      :key="item.id"
-      :title="item.title"
-      :id="item.id"
-      :isOpen="item.isOpen"
-      :wasRead="item.wasRead"
-      @open-news="openNews"
-      @read-news="readNews"
-      @unread-news="unreadNews"
-    />
+    <app-list>
+      <template #default="{ index, iter }">
+        <span style="color: orange">
+          <strong>{{ index + 1 }}</strong> item: {{ iter }}
+        </span>
+      </template>
+    </app-list>
+
+    <app-block>
+      <p>Lorem ipsum dolor sit amet.</p>
+      <template #title><h3>This is a title</h3> </template>
+    </app-block>
   </div>
 </template>
 
 <script>
-import AppNews from './AppNews.vue'
+import AppBlock from './AppBlock.vue'
+import AppList from './AppList.vue'
 
 export default {
-  name: 'App',
-  components: { AppNews },
-  data() {
-    return {
-      now: new Date().toLocaleDateString(),
-      news: [
-        { id: 1, title: 'News 1', isOpen: false, wasRead: false },
-        { id: 2, title: 'News 2', isOpen: false, wasRead: false },
-        { id: 3, title: 'News 3', isOpen: false, wasRead: false },
-      ],
-      openRate: 0,
-      readRate: new Set(),
-    }
-  },
-  methods: {
-    openNews(id) {
-      const index = this.news.findIndex((item) => item.id === id)
-
-      this.news[index].isOpen = !this.news[index].isOpen
-      this.openRate = this.news.filter((item) => item.isOpen).length
-    },
-    readNews(id) {
-      const index = this.news.findIndex((item) => item.id === id)
-
-      this.news[index].isOpen = false
-      this.readRate.add(id)
-      this.news[index].wasRead = true
-      this.openRate = this.news.filter((item) => item.isOpen).length
-    },
-    unreadNews(id) {
-      const news = this.news.find((item) => item.id === id)
-
-      news.wasRead = false
-      this.readRate.delete(id)
-    },
-  },
-  provide() {
-    return {
-      news: this.news,
-    }
-  },
+  components: { AppBlock, AppList },
 }
 </script>
 
-<style scoped>
-h2 {
-  color: red;
-}
-</style>
+<style scoped></style>
