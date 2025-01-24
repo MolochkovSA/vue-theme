@@ -1,29 +1,41 @@
 <template>
   <div class="container">
-    <app-alert
-      v-if="alert"
-      title="Warning!"
-      text="Lorem ipsum dolor sit amet"
-      type="warning"
-      closable
-      @close="alert = false"
-    />
-
     <div class="card">
-      <button class="btn primary" @click="toggleAlert">{{ alert ? 'Hide' : 'Show' }} message</button>
-    </div>
+      <h2 v-color:[type].blink.hover="myColor">Про директивы</h2>
 
-    <app-block></app-block>
+      <div class="form-control">
+        <label for="inp">Активный по умолчанию</label>
+        <input type="text" id="inp" v-focus />
+      </div>
+
+      <button class="btn" @click="myColor = 'blue'">Сделать синим!</button>
+      <button class="btn" @click="type = type === 'color' ? 'backgroundColor' : 'color'">Переключить тип</button>
+    </div>
   </div>
 </template>
 
 <script>
-import AppAlert from './components/AppAlert'
-import AppBlock from './components/AppBlock.vue'
-import { alertMixin } from './alertMixin'
+import { colorDirective } from './colorDirective'
+import { focusDirective } from './focusDirective'
 
 export default {
-  mixins: [alertMixin],
-  components: { AppAlert, AppBlock },
+  name: 'App',
+  data() {
+    return {
+      myColor: 'red',
+      type: 'color',
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      console.log('myColor', this.myColor)
+
+      this.myColor = 'green'
+    }, 3000)
+  },
+  directives: {
+    focus: focusDirective,
+    color: colorDirective,
+  },
 }
 </script>
